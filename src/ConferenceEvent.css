@@ -265,7 +265,8 @@
   }
   .nav_links{
     display: flex;
-    gap: 170px;
+    gap: 100px;
+    align-items: center;
   }
   .left_navbar{
     width: 60vw;
@@ -289,6 +290,7 @@
     width:200px ;
     display: flex;
     gap: 20px;
+    align-items: center;
   }
   .details_button {
     padding: 8px 16px;
