@@ -287,7 +287,6 @@
   }
   .button_container{
     /* background-color: red; */
-    width:200px ;
     display: flex;
     gap: 20px;
     align-items: center;
