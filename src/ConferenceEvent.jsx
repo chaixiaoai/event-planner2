@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./ConferenceEvent.css";
 import TotalCost from "./TotalCost";
+import CostDisplay from "./CostDisplay";
 import QuantityControls from "./QuantityControls";
 import Navbar from "./Navbar";
 import { useSelector, useDispatch } from "react-redux";
@@ -42,13 +43,28 @@ const ConferenceEvent = () => {
 
     const getItemsFromTotalCost = () => {
         const items = [];
+        venueItems.forEach((item) => {
+            if (item.quantity > 0) {
+                items.push({ ...item, type: "venue" });
+            }
+        });
+        avItems.forEach((item) => {
+            if (item.quantity > 0){
+                items.push({ ...item, type: "av" });
+            }
+        });
+        mealItems.forEach((item) => {
+            if (item.selected) {
+                const itemForDisplay = { ...item, type: "meal"};
+                itemForDisplay.numberOfPeople = numberOfPeople;
+                items.push(itemForDisplay);
+            }
+        });
+        return items;       
     };
 
     const items = getItemsFromTotalCost();
 
-    const ItemsDisplay = ({ items }) => {
-
-    };
     const calculateTotalCost = (section) => {
         let totalCost = 0;
         let items = null;
@@ -71,6 +87,12 @@ const ConferenceEvent = () => {
     const venueTotalCost = calculateTotalCost("venue");
     const avTotalCost = calculateTotalCost("av");
     const mealTotalCost = calculateTotalCost("meal");
+    const totalCosts = {
+        venue: venueTotalCost,
+        av: avTotalCost,
+        meal: mealTotalCost,
+        total: venueTotalCost + avTotalCost + mealTotalCost,
+    };
 
     const navigateToProducts = (idType) => {
         if (idType == '#venue' || idType == '#addons' || idType == '#meals') {
@@ -91,9 +113,8 @@ const ConferenceEvent = () => {
                 {showDetails ? (
                     <div className="total_amount_detail">
                         <TotalCost 
-                            totalCosts={venueTotalCost} 
-                            handleClick={handleToggleItems} 
-                            ItemsDisplay={() => <ItemsDisplay items={items} />} 
+                            totalAmount={totalCosts.total} 
+                            CostDisplay={() => <CostDisplay items={items} />} 
                         />
                     </div> ) : (
                     <div className="items-information">
